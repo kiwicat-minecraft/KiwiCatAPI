@@ -2,25 +2,29 @@
   "schemaVersion": 1,
   "id": "kiwicatapi",
   "version": "${version}",
-
   "name": "KiwiCatAPI",
   "description": "",
   "authors": [],
-  "contact": {},
-
+  "contact": {
+    "repo": "https://github.com/kiwi/KiwiCatAPI"
+  },
   "license": "MIT",
   "icon": "assets/kiwicatapi/icon.png",
-
   "environment": "client",
-  "entrypoints": {},
-
-      "mixins": [
-        "kiwicatapi.mixins.json"
-      ],
-
+  "entrypoints": {
+    "client": [
+      "cat.kiwicat.kiwicatapi.client.KiwiCatAPIClient"
+    ],
+    "main": [
+      "cat.kiwicat.kiwicatapi.KiwiCatAPI"
+    ]
+  },
+  "mixins": [
+    "kiwicatapi.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-        "fabric": "*",
+    "fabric": "*",
     "minecraft": "${minecraft_version}"
   }
 }

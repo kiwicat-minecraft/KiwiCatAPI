@@ -73,17 +73,28 @@ jar {
 // configure the maven publication
 publishing {
     publications {
-        create("mavenJava", MavenPublication) {
-            artifactId = project.archives_base_name
+        mavenJava(MavenPublication) {
+            groupId = "cat.kiwicat"
+            artifactId = "kiwicatapi"
+            version = "1.1.0"
+
             from components.java
         }
     }
 
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/kiwicat-minecraft/KiwiCatAPI")
+
+            credentials {
+                username = project.findProperty("gpr.user")
+                password = project.findProperty("gpr.key")
+            }
+        }
     }
+}
+
+tasks.named("runClient", JavaExec) {
+    jvmArgs "-Ddevauth.enabled=true"
 }

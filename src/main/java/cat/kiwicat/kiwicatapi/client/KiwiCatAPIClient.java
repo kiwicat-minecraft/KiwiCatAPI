@@ -1,4 +1,22 @@
 package cat.kiwicat.kiwicatapi.client;
 
-public class KiwiCatAPIClient {
+import cat.kiwicat.kiwicatapi.KiwiCatAPI;
+import cat.kiwicat.kiwicatapi.client.util.SkinInfo;
+import net.fabricmc.api.ClientModInitializer;
+import net.minecraft.util.Identifier;
+
+import java.util.ArrayList;
+
+public class KiwiCatAPIClient implements ClientModInitializer {
+
+    public static ArrayList<SkinInfo> SkinChanges = new ArrayList<>();
+
+    public static boolean blacklist = false;
+
+
+    @Override
+    public void onInitializeClient() {
+        //SkinChanges.add(new SkinInfo(Identifier.of(KiwiCatAPI.MOD_ID, "/skins/maid_kiwi.png"), "Kiwicat0_0",true));
+
+    }
 }

@@ -30,7 +30,5 @@ public class UwUifier {
         return result;
     }
 
-    public static void main(String[] args) {
-        System.out.println(uwuify("hello you cutie <3"));
-    }
+
 }
