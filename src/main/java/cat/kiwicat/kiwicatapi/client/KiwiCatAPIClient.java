@@ -1,9 +1,7 @@
 package cat.kiwicat.kiwicatapi.client;
 
-import cat.kiwicat.kiwicatapi.KiwiCatAPI;
-import cat.kiwicat.kiwicatapi.client.util.SkinInfo;
+import cat.kiwicat.kiwicatapi.api.SkinInfo;
 import net.fabricmc.api.ClientModInitializer;
-import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 

@@ -1,12 +1,9 @@
 package cat.kiwicat.kiwicatapi;
 
-import cat.kiwicat.kiwicatapi.client.util.SkinInfo;
 import cat.kiwicat.kiwicatapi.util.UwUifier;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
 
 public class KiwiCatAPI implements ModInitializer {
 

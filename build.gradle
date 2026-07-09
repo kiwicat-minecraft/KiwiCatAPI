@@ -18,6 +18,8 @@ repositories {
     // for more information about repositories.
 }
 
+
+
 dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -73,24 +75,18 @@ jar {
 // configure the maven publication
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        maven(MavenPublication) {
+            from components.java
+
             groupId = "cat.kiwicat"
             artifactId = "kiwicatapi"
-            version = "1.1.0"
-
-            from components.java
+            version = "${project.mod_version}"
         }
     }
 
     repositories {
         maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/kiwicat-minecraft/KiwiCatAPI")
-
-            credentials {
-                username = project.findProperty("gpr.user")
-                password = project.findProperty("gpr.key")
-            }
+            url = uri("file:///run/media/kiwi/02115398-9789-4df0-a7c7-3cf197ff149e/apps/vs code/proj/kiwicat.wtf/")
         }
     }
 }

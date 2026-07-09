@@ -1,4 +1,4 @@
-package cat.kiwicat.kiwicatapi.client.util;
+package cat.kiwicat.kiwicatapi.api;
 
 import net.minecraft.util.Identifier;
 

@@ -1,7 +1,9 @@
 package cat.kiwicat.kiwicatapi.mixin;
 
+import cat.kiwicat.kiwicatapi.api.SkinMaker;
+import cat.kiwicat.kiwicatapi.api.SkinProvider;
 import cat.kiwicat.kiwicatapi.client.KiwiCatAPIClient;
-import cat.kiwicat.kiwicatapi.client.util.SkinInfo;
+import cat.kiwicat.kiwicatapi.api.SkinInfo;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.util.SkinTextures;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +17,7 @@ public abstract class PlayerRenderMixin {
     @Inject(method = "getSkinTextures", at = @At("RETURN"), cancellable = true)
     private void replaceSkin(CallbackInfoReturnable<SkinTextures> cir) {
 
-        SkinTextures.Model model;
+        final SkinTextures.Model[] model = new SkinTextures.Model[1];
 
         AbstractClientPlayerEntity self =
                 (AbstractClientPlayerEntity) (Object) this;
@@ -24,60 +26,65 @@ public abstract class PlayerRenderMixin {
 
         if (!KiwiCatAPIClient.blacklist) {
 
-            for (SkinInfo skin : KiwiCatAPIClient.SkinChanges) {
+            SkinMaker.providers().forEach(provider -> {
+                for(SkinInfo skin : provider.create().getSkins()){
+                    if (skin.getUsername().equals(self.getName().getString())) {
 
-                if (skin.getUsername().equals(self.getName().getString())) {
+                        if (skin.isSLIM()) {
+                            model[0] = SkinTextures.Model.SLIM;
+                        } else {
+                            model[0] = SkinTextures.Model.WIDE;
+                        }
 
-                    if (skin.isSLIM()) {
-                        model = SkinTextures.Model.SLIM;
+                        SkinTextures modified = new SkinTextures(
+                                skin.getTexture(),
+                                original.textureUrl(),
+                                original.capeTexture(),
+                                original.elytraTexture(),
+                                model[0],
+                                original.secure()
+                        );
+
+                        cir.setReturnValue(modified);
+                        return;
+                    }
+                }
+            } );
+
+
+
+        } else {
+            SkinMaker.providers().forEach(provider -> {
+
+                for (SkinInfo skin : provider.create().getSkins()) {
+
+                    if (skin.getUsername().equals(self.getName().getString())) {
+                        return;
+                    }
+                }
+
+                if (!provider.create().getSkins().isEmpty()) {
+
+                    SkinInfo skin_first = KiwiCatAPIClient.SkinChanges.get(0);
+
+                    if (skin_first.isSLIM()) {
+                        model[0] = SkinTextures.Model.SLIM;
                     } else {
-                        model = SkinTextures.Model.WIDE;
+                        model[0] = SkinTextures.Model.WIDE;
                     }
 
                     SkinTextures modified = new SkinTextures(
-                            skin.getTexture(),
+                            skin_first.getTexture(),
                             original.textureUrl(),
                             original.capeTexture(),
                             original.elytraTexture(),
-                            model,
+                            model[0],
                             original.secure()
                     );
 
                     cir.setReturnValue(modified);
-                    return;
                 }
-            }
-
-        } else {
-
-            for (SkinInfo skin : KiwiCatAPIClient.SkinChanges) {
-
-                if (skin.getUsername().equals(self.getName().getString())) {
-                    return;
-                }
-            }
-
-            if (!KiwiCatAPIClient.SkinChanges.isEmpty()) {
-
-                SkinInfo skin_first = KiwiCatAPIClient.SkinChanges.get(0);
-
-                if (skin_first.isSLIM()) {
-                    model = SkinTextures.Model.SLIM;
-                } else {
-                    model = SkinTextures.Model.WIDE;
-                }
-
-                SkinTextures modified = new SkinTextures(
-                        skin_first.getTexture(),
-                        original.textureUrl(),
-                        original.capeTexture(),
-                        original.elytraTexture(),
-                        model,
-                        original.secure()
-                );
-
-                cir.setReturnValue(modified);
-            }
+            });
         }
     }
 }
